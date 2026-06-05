@@ -52,7 +52,7 @@
     loop: "{{ ec2_output.results }}"
     when: 
     - item.item == "frontend" 
-      - action == "create"
+    - action == "create"
     
 
   - name: delete r53 records
