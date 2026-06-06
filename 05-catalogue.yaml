@@ -15,4 +15,24 @@
       home: /app
       shell: /sbin/nologin
       comment: "roboshop system user"
-
+  - name: remove app directory
+    file:
+      path: /app
+      state: absent
+  - name: delete catalogue.zip in /tmp directory
+    file:
+      path: /tmp/catalogue.zip
+      state: absent
+  - name: create app directory
+    file:
+      path: /app
+      state: directory
+  - name: download catalogue.zip
+    get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+      dest: /tmp/catalogue.zip
+  - name: unzip catalogue.zip
+    unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      
