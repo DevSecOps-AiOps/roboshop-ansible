@@ -7,7 +7,7 @@
       name: "{{ item }}"
       state: present
     loop:
-    - python 3
+    - python3
     - gcc
     - python3-devel
   - name: create roboshop system user
