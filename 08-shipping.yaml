@@ -71,6 +71,7 @@
     systemd_service:
       name: shipping
       daemon_reload: true
+      masked: no
   - name: enable and start shipping
     service:
       name: shipping
