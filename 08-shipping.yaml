@@ -4,8 +4,11 @@
   tasks: 
   - name: install maven
     package:
-      name: maven 
+      name: "{{ item }}" 
       state: present
+    loop:
+      - maven
+      - mysql 
   - name: create roboshop system user
     user:
       name: roboshop
@@ -38,6 +41,24 @@
     template:
       src: shipping.service.j2
       dest: /etc/systemd/system/shipping.service
+
+  - name: install python dependencies
+    pip:
+      name: PyMySQL
+      executable: pip3.9
+      
+  - name: load mysql data 
+    ansible.mysql.mysql_db:
+      state: import
+      name: all
+      login_user: root
+      login_password: RoboShop@1
+      login_host:  "{{ MYSQL_HOST }}"
+      target: "{{ item }}"
+    loop:
+    - /app/db/schema.sql
+    - /app/db/app-user.sql
+    - /app/db/master-data.sql
   - name: daemon reload
     systemd_service:
       name: shipping
@@ -47,6 +68,7 @@
       name: shipping
       state: restarted
       enabled: true
+      masked: no
   - name: installing dependencies
     command: mvn clean package
     args:
